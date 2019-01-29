@@ -318,6 +318,7 @@ function* fetchRecordsBySlug(action) {
 
 
 function* fetchRecords(action) {
+	console.log('featch', action)
 	yield put({ type: ACTION_TYPE.RECORDS_LOADING, payload: true});
 
 	try {
