@@ -54,6 +54,7 @@ class ExhibitShow extends Component {
 
 	saveAll = (event) => {
 		this.props.dispatch(recordCacheToDatabase());
+		// this.setState({ showRecords: true, recordEditorType: '', showExhibitSettings: false});
 	}
 
 	componentDidUpdate = (prevProps) =>{
@@ -62,7 +63,8 @@ class ExhibitShow extends Component {
 			!this.props.recordsLoading){
 				this.props.fetchRecordsBySlug(this.props.match.params.slug);
 			}
-		if (this.props.filteredRecords !== prevProps.filteredRecords){
+		if ((this.props.filteredRecords !== prevProps.filteredRecords) && (this.state.recordEditorType === '')){
+			console.log('change in filtered records')
 			this.setState({records: this.props.filteredRecords});
 			this.props.dispatch(this.props.updateRecordCache(this.props.filteredRecords));
 		}
