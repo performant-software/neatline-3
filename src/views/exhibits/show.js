@@ -54,7 +54,6 @@ class ExhibitShow extends Component {
 
 	saveAll = (event) => {
 		this.props.dispatch(recordCacheToDatabase());
-		// this.setState({ showRecords: true, recordEditorType: '', showExhibitSettings: false});
 	}
 
 	componentDidUpdate = (prevProps) =>{
