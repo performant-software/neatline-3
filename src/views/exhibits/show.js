@@ -63,7 +63,6 @@ class ExhibitShow extends Component {
 				this.props.fetchRecordsBySlug(this.props.match.params.slug);
 			}
 		if (this.props.filteredRecords !== prevProps.filteredRecords){
-			console.log('change in filtered records')
 			this.setState({records: this.props.filteredRecords});
 			this.props.dispatch(this.props.updateRecordCache(this.props.filteredRecords));
 		}
