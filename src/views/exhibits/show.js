@@ -39,7 +39,7 @@ class ExhibitShow extends Component {
 		super(props)
 		const viewMode = this.props.userSignedIn ? 'editing' : 'signedOut'
 		this.state = {
-			records: this.props.filteredRecords, 
+			records: this.props.filteredRecords,
 			viewMode: viewMode
 		}
 	}
@@ -67,7 +67,12 @@ class ExhibitShow extends Component {
 			this.props.dispatch(this.props.updateRecordCache(this.props.filteredRecords));
 		}
 	}
-	
+
+	toggleRecords = (val) => this.setState({ showRecords: val });
+
+	recordEditorType = (val) => this.setState({ recordEditorType: val });
+	setExhibitPane = (val) => this.setState({showExhibitSettings: val});
+
 	showRecords = () => {
 		return (this.props.showRecords ?
 					<Records exhibitShowURL={this.props.match.url}
@@ -76,7 +81,7 @@ class ExhibitShow extends Component {
 						setRecordEditorType={this.props.setRecordEditorType}
 						viewMode={this.state.viewMode} /> :
 					(this.props.recordEditorType === 'new' ? <RecordCreate setShowRecords={this.props.setShowRecords} deselect={this.props.deselectRecord} setRecordEditorType={this.props.setRecordEditorType} /> : <RecordUpdate setShowRecords={this.props.setShowRecords} deselect={this.props.deselectRecord} setRecordEditorType={this.props.setRecordEditorType}/>
-				
+
 				)
 		);
 	}
@@ -97,7 +102,7 @@ class ExhibitShow extends Component {
 		this.setState({viewingExhibitEdit: !this.state.viewingExhibitEdit})
 	}
 
-	setViewMode = (val) => this.setState({viewMode: val}) 
+	setViewMode = (val) => this.setState({viewMode: val})
 
 
 	render() {
@@ -111,23 +116,23 @@ class ExhibitShow extends Component {
 				<Menu size='massive'>
 					<Menu.Item header as={Link} to={`${window.baseRoute}/`}><h3>NEATLINE </h3></Menu.Item>
 					<Menu.Item> {exhibit['o:title']}</Menu.Item>
-						<Menu.Item> {this.props.userSignedIn ?<Icon name="edit" />: <Icon name="search"/>}</Menu.Item>
-					
+						<Menu.Item> {props.userSignedIn ?<Icon name="edit" />: <Icon name="search"/>}</Menu.Item>
+
 					<Menu.Item position='right'>
 						{this.props.userSignedIn ?
 								<div>
-							<Button 
-								icon 
+							<Button
+								icon
 								toggle
 								basic
-								color={this.props.showExhibitSettings ? 'blue' : null}
-								active={this.props.showExhibitSettings}
-								onClick={()=>{this.props.setShowExhibitSettings(true); this.setViewMode('editing')}}> 
+								color={this.state.showExhibitSettings ? 'blue' : null}
+								active={this.state.showExhibitSettings}
+								onClick={()=>this.setExhibitPane(true)}>
 								Exhibit Settings <Icon name="settings" />
 							</Button>
 							<Button
 								icon
-								toggle 
+								toggle
 								basic
 								color={(!this.props.showExhibitSettings && this.state.viewMode === 'editing') ? 'blue' : null}
 								active={!this.props.showExhibitSettings && this.state.viewMode === 'editing'}
@@ -175,7 +180,7 @@ class ExhibitShow extends Component {
 				<Grid divided padded>
 					<Grid.Row>
 						{this.props.userSignedIn ?
-							( this.props.showExhibitSettings ? 
+							( this.props.showExhibitSettings ?
 								<Grid.Column width={4}>
 									<ExhibitPanelContent
 										exhibit={this.props.exhibit}
@@ -184,10 +189,10 @@ class ExhibitShow extends Component {
 										:
 								<Grid.Column width={4}>
 									{this.showRecords()}
-								</Grid.Column> 
+								</Grid.Column>
 								)
-								: 	
-							(this.props.showExhibitSettings? 
+								:
+							(this.props.showExhibitSettings?
 								<Grid.Column width={15}>
 									<Card
 										fluid
@@ -208,7 +213,7 @@ class ExhibitShow extends Component {
 										setRecordEditorType={this.props.setRecordEditorType}
 										viewMode={'signedOut'} />
 								</Grid.Column>
-								) 
+								)
 							}
 							<Grid.Column floated='right' width={11}>
 								<ExhibitPublicMap

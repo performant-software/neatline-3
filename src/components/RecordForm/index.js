@@ -607,7 +607,8 @@ class RecordForm extends Component {
 
 }
 
-RecordForm = reduxForm({ form: 'record', enableReinitialize: true})(RecordForm);
+RecordForm = reduxForm({form: 'record', enableReinitialize: true})(RecordForm);
+
 const mapStateToProps = state => ({
 	record: state.record,
 	userSignedIn: state.user.userSignedIn,

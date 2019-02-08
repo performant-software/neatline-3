@@ -46,8 +46,8 @@ export default function* rootSaga() {
 		takeLatest(ACTION_TYPE.EXHIBIT_CACHE_SAVE, saveCacheToDatabase),
 
 		takeLatest(ACTION_TYPE.EVENT_REFRESH_MAP_GEOMETRY, requestMapRefreshGeometry),
-		takeLatest(ACTION_TYPE.EVENT_REFRESH_MAP, requestMapRefresh),
-		takeLatest(ACTION_TYPE.HAS_UNSAVED_CHANGES, requestMapRefresh)
+		takeLatest(ACTION_TYPE.EVENT_REFRESH_MAP, requestMapRefresh)//,
+		// takeLatest(ACTION_TYPE.HAS_UNSAVED_CHANGES, requestMapRefresh)
 
 	])
 }

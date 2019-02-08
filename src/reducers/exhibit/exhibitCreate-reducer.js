@@ -20,6 +20,7 @@ export default function(state = initialState, action) {
 			};
 
 		case ACTION_TYPE.EXHIBIT_POST_ERRORED:
+      console.log('Exhibit post error', action);
 			return {
 				...state,
 				errored: true
