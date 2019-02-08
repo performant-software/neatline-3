@@ -1,6 +1,7 @@
 import initialState from './record-initialState';
 import * as ACTION_TYPE from '../../actions/action-types';
 import {strings} from '../../i18nLibrary';
+import history from '../../history';
 
 export default function(state = initialState, action) {
 	switch (action.type) {
@@ -25,6 +26,8 @@ export default function(state = initialState, action) {
 
 			// Accepted (RECORD_CREATED)
 			} else {
+        // move the UI via URL to editing the newly saved record
+        history.push(history.location + '/edit/' + action.payload['o:id'])
 				return {
 					...state,
 					loading: false,

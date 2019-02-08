@@ -71,7 +71,7 @@ class ExhibitShow extends Component {
 	toggleRecords = (val) => this.setState({ showRecords: val });
 
 	recordEditorType = (val) => this.setState({ recordEditorType: val });
-	setExhibitPane = (val) => this.setState({showExhibitSettings: val});
+	// setExhibitPane = (val) => this.setState({showExhibitSettings: val});
 
 	showRecords = () => {
 		return (this.props.showRecords ?
@@ -125,9 +125,9 @@ class ExhibitShow extends Component {
 								icon
 								toggle
 								basic
-								color={this.state.showExhibitSettings ? 'blue' : null}
-								active={this.state.showExhibitSettings}
-								onClick={()=>this.setExhibitPane(true)}>
+                color={this.props.showExhibitSettings ? 'blue' : null}
+								active={this.props.showExhibitSettings}
+								onClick={()=>{this.props.setShowExhibitSettings(true); this.setViewMode('editing')}}>
 								Exhibit Settings <Icon name="settings" />
 							</Button>
 							<Button
