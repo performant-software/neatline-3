@@ -26,8 +26,6 @@ export default function(state = initialState, action) {
 
 			// Accepted (RECORD_CREATED)
 			} else {
-        // move the UI via URL to editing the newly saved record
-        history.push(history.location + '/edit/' + action.payload['o:id'])
 				return {
 					...state,
 					loading: false,

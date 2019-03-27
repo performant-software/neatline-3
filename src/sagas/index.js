@@ -54,6 +54,7 @@ export default function* rootSaga() {
 
 
 function* createRecord(action) {
+  console.log('createRecord saga');
 	// Make API call
 	try {
 		let url = urlFormat(recordsEndpoint);
@@ -80,6 +81,7 @@ function* createRecord(action) {
 }
 
 function* selectRecord(action){
+  console.log('selectRecord saga');
 	let exhibit = yield select(getExhibitCache);
 	let slug = exhibit['o:slug'];
 	let url = (typeof window.baseRoute !== 'undefined')?`${window.baseRoute}`:"";
@@ -88,6 +90,7 @@ function* selectRecord(action){
 }
 
 function* deselectRecord(){
+  console.log('deselectRecord saga');
 	let exhibit = yield select(getExhibitCache);
 	let slug = exhibit['o:slug'];
 	let url = (typeof window.baseRoute !== 'undefined')?`${window.baseRoute}`:"";
@@ -97,6 +100,7 @@ function* deselectRecord(){
 }
 
 function* createRecordResponseReceived(action) {
+  console.log('createRecordResponseReceived saga');
 	// On success...
 	if (typeof action.payload.errors === 'undefined') {
 		yield put({type: ACTION_TYPE.RECORD_CACHE_UPDATE, payload:{
@@ -113,7 +117,9 @@ function* createRecordResponseReceived(action) {
 
 
 	// On failure...
-	} else {}
+	} else {
+    console.log('!! failure response received for createRecord');
+  }
 }
 
 function* deleteRecord(action) {
@@ -159,6 +165,7 @@ function* deleteRecordResponseReceived(action) {
 }
 
 function* updateRecord(action) {
+  console.log('updateRecord saga')
 	let record = action.payload;
 	try {
 		let url = urlFormat(recordsEndpoint, {}, record['o:id']);
@@ -184,21 +191,26 @@ function* updateRecord(action) {
 }
 
 function* updateRecordResponseReceived(action) {
+  console.log('updateRecordResponseReceived saga');
 	// On success...
 	if (typeof action.payload.errors === 'undefined') {
 		yield put({type: ACTION_TYPE.RECORD_REPLACED, record: action.payload});
+    console.log('UPDATE RESPONSE PAYLOAD:', action.payload);
 	}
 
-	yield put({type: ACTION_TYPE.RECORD_DESELECTED});
+  // commenting out for now -- what is deselection intended to accomplish here? (akstuhl)
+	// yield put({type: ACTION_TYPE.RECORD_DESELECTED});
 
 	yield put({type: ACTION_TYPE.LEAFLET_IS_EDITING, payload: false});
 }
 
 function requestMapRefreshGeometry(action){
+  console.log('GEO SAGA: requestMapRefreshGeometry');
 	var event = new CustomEvent("refreshMapGeometry");
 	document.dispatchEvent(event);
 }
 function requestMapRefresh(action){
+  console.log('GEO SAGA: requestMapRefresh');
 	var event = new CustomEvent("refreshMap");
 	document.dispatchEvent(event);
 }
@@ -232,6 +244,7 @@ function* fetchExhibitsResponseReceived(action) {
 }
 
 function* updateExhibit(action) {
+  console.log('updateExhibit saga');
 	try {
 		let exhibit = action.payload;
 		let url = urlFormat(exhibitsEndpoint, {}, exhibit['o:id']);
@@ -262,6 +275,7 @@ function* updateExhibit(action) {
 }
 
 function* updateExhibitResponseReceived(action) {
+  console.log('updateExhibitResponseReceived saga');
 	let exhibit = action.payload.exhibit;
 	if (typeof action.payload.errors === 'undefined') {
 		yield put({type: ACTION_TYPE.EXHIBIT_PATCH_SUCCESS});
@@ -274,6 +288,7 @@ function* updateExhibitResponseReceived(action) {
 }
 
 function* fetchRecordsBySlug(action) {
+  console.log('fetchRecordsBySlug saga');
 	let slug = action.payload;
 	let exhibits = yield select(getExhibits);
 	if (exhibits && exhibits.length > 0) {
@@ -318,6 +333,7 @@ function* fetchRecordsBySlug(action) {
 
 
 function* fetchRecords(action) {
+  console.log('fetchRecords saga');
 	yield put({ type: ACTION_TYPE.RECORDS_LOADING, payload: true});
 
 	try {
@@ -334,6 +350,7 @@ function* fetchRecords(action) {
 }
 
 function* fetchRecordsResponseReceived(action) {
+  console.log('fetchRecordsResponseReceived saga');
 	if (typeof action.payload.errors === 'undefined') {
 		let records = yield parseRecordsJSON(action.payload.response);
 		yield put({type: ACTION_TYPE.RECORD_CACHE_UPDATE, payload:records});
@@ -353,17 +370,20 @@ function* fetchRecordsResponseReceived(action) {
 
 
 function* updateRecordCacheAndSave(action) {
+  console.log('updateRecordCacheAndSave saga');
 	yield put({type: ACTION_TYPE.RECORD_CACHE_UPDATE, payload:action.payload});
 	yield put({type: ACTION_TYPE.EXHIBIT_CACHE_SAVE, payload:action.payload});
 	yield put({type: ACTION_TYPE.EVENT_REFRESH_MAP_GEOMETRY});
 }
 
 function* saveCacheToDatabase(action) {
+  console.log('saveCacheToDatabase saga');
 	yield put({type: ACTION_TYPE.LEAFLET_IS_SAVING, payload: true});
 
 	let exhibit = yield select(getExhibitCache);
 	let records = yield select(getMapCache);
 	let selectedRecord = action.payload.selectedRecord;
+  console.log('in saveCacheToDatabase, selectedRecord = ', selectedRecord);
 	let isNewRecord=false;
 
 	// Create if there's a new one
@@ -379,6 +399,7 @@ function* saveCacheToDatabase(action) {
 	yield put({type: ACTION_TYPE.RECORD_CACHE_CLEAR_UNSAVED});
 
 
+  // FIXME: TO BE RESOLVED - this was causing all kinds of trouble because all records get updated every time anything happens, and then between the saga/takeLatest flow and the reducer's assingment of the response object to exhibitShow.editorRecord, the record selection would change counterintuitively; all that said, I guess we want to be able to do something like this in theory, so maybe the problem should be fixed in the response handler (reducer) stage
 	// Update records
 	for (let x=0; x<records.length; x++) {
 		let thisRecord = records[x];
@@ -392,6 +413,7 @@ function* saveCacheToDatabase(action) {
 		yield put({type: ACTION_TYPE.EXHIBIT_UPDATE, payload: exhibit});
 	}
 
+  // why do we deselect then select here?
 	if(typeof selectedRecord !== 'undefined' && selectedRecord !== null && !isNewRecord){
 		yield put({type: ACTION_TYPE.RECORD_DESELECTED});
 		yield put({type: ACTION_TYPE.RECORD_SELECTED, payload:{record:selectedRecord}});

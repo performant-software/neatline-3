@@ -136,10 +136,11 @@ export default function(state = initialState, action) {
 			}
 
 		case ACTION_TYPE.RECORD_REPLACED:
+      // console.log('START of RECORD_REPLACED - selectedRecord')
 			return {
 				...state,
 				records: state.records.filter(r => r['o:id'].toString() !== action.record['o:id'].toString()).concat(action.record),
-				editorRecord: action.record,
+				// editorRecord: action.record,
 				filteredRecords: state.filteredRecords.filter(r => r['o:id'].toString() !== action.record['o:id'].toString()).concat(action.record)
 				/* selectedRecord: action.record */
 			}
