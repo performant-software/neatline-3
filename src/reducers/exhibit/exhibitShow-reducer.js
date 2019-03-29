@@ -117,7 +117,8 @@ export default function(state = initialState, action) {
 		case ACTION_TYPE.EDITOR_CLOSE_NEW_RECORD:
 			return {
 				...state,
-				editorNewRecord: false
+				editorNewRecord: false,
+        recordEditorType: ''
 			}
 
 		case ACTION_TYPE.TAB_INDEX_SET:
