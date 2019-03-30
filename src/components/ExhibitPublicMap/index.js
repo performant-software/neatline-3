@@ -48,7 +48,7 @@ class ExhibitPublicMap extends Component {
 
 	// Stub for leaflet to attach to
 	render() {
-		return (<div id='leafletMap'/>)
+		return (<div id='leafletMap' style={{minHeight: '400px'}}/>)
 	}
 
 	// enables/disables render
@@ -65,7 +65,7 @@ class ExhibitPublicMap extends Component {
 			this.ls_mapUpdate();
 		}
 
-		if (prevProps.selectedRecord !== this.props.selectedRecord) {
+		if (this.firstUpdate || prevProps.selectedRecord !== this.props.selectedRecord) {
 			this.ls_mapUpdate();
 		}
 
@@ -80,6 +80,8 @@ class ExhibitPublicMap extends Component {
 	componentDidMount(){
 		document.addEventListener("refreshMapGeometry", this.event_refreshMapGeometry);
 		document.addEventListener("refreshMap", this.event_refreshMap);
+    this.firstUpdate = true;
+    this.forceUpdate();
 	}
 
 	componentWillUnmount(){
