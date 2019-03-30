@@ -21,7 +21,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {change} from 'redux-form';
 import {updateRecordCacheAndSave, leafletIsSaving, leafletIsEditing} from '../../actions';
-import { selectRecord, deselectRecord, previewRecord, unpreviewRecord, setShowRecords} from '../../actions';
+import { selectRecord, deselectRecord, previewRecord, unpreviewRecord, setShowRecords, setShowExhibitSettings} from '../../actions';
 import L from 'leaflet';
 import Draw from 'leaflet-draw';
 import leafletSupport from './leafletSupport.js';
@@ -452,14 +452,16 @@ class ExhibitPublicMap extends Component {
 
 	onGeometryClick=(event,record)=>{
 		if (
-			typeof this.props.records === 'undefined' || 
-			this.isDrawing || 
-			this.props.showExhibitSettings
+			typeof this.props.records === 'undefined' ||
+			this.isDrawing //||
+			// this.props.showExhibitSettings
 		){return;}
 		L.DomEvent.stop(event);
 		this.props.selectRecord({record:record});
 		if (this.props.viewMode === 'editing'){
-			this.props.setShowRecords(false); this.props.setRecordEditorType('edit')
+			this.props.setShowRecords(false);
+      this.props.setShowExhibitSettings(false);
+      this.props.setRecordEditorType('edit')
 		}
 		this.forceUpdate();
 	}
@@ -483,7 +485,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 	dispatch,
 	leafletIsSaving,
 	updateRecordCacheAndSave,
-	setShowRecords
+	setShowRecords,
+  setShowExhibitSettings
 }, dispatch);
 
 export default connect(null,mapDispatchToProps)(ExhibitPublicMap);

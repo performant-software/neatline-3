@@ -234,7 +234,7 @@ class ExhibitShow extends Component {
 									setRecordEditorType={this.props.setRecordEditorType}
 									setShowRecords={this.props.setShowRecords}
 								/>
-								<RecordInfoPanel isVisible={!this.props.leaflet.isEditing} />
+								<RecordInfoPanel isVisible={!this.props.showExhibitSettings && !this.props.leaflet.isEditing} />
 						</Grid.Column>
 					</Grid.Row>
 				</Grid>
